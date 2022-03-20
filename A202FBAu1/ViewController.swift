@@ -7,17 +7,33 @@
 
 import UIKit
 import FBSDKLoginKit
+import Firebase
 
 class ViewController: UIViewController, LoginButtonDelegate {
     
     //FB 登入完成
     func loginButton(_ loginButton: FBLoginButton, didCompleteWith result: LoginManagerLoginResult?, error: Error?) {
         print("登入完成 FB")
+
+        let credential = FacebookAuthProvider
+          .credential(withAccessToken: AccessToken.current!.tokenString)
+        
+        Auth.auth().signIn(with: credential) { authData, error in
+            print(error?.localizedDescription)
+            print("Complate")
+        }
+   
+        
     }
     
     //登出
     func loginButtonDidLogOut(_ loginButton: FBLoginButton) {
         print("登出 FB")
+        do{
+            try Auth.auth().signOut()
+        }catch{
+            print(error.localizedDescription)
+        }
     }
     
 
